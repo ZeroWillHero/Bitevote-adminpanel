@@ -3,6 +3,8 @@ import './Add.css';
 import { assets } from '../../assets/assets';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import RadioButtonGroup from '../../components/RadioButton/RadioButton';
+import CustomizableButton from '../../components/CustomizableButton/CustomizableButton';
 
 const Add = ({ url }) => {
   const [image, setImage] = useState(false);
@@ -151,6 +153,7 @@ const Add = ({ url }) => {
             placeholder="Type here"
           />
         </div>
+        <RadioButtonGroup />
         <div className="add-size-meal">
           <div className="add-size flex-col">
             <p>Select size</p>
@@ -186,6 +189,8 @@ const Add = ({ url }) => {
             />
           </div>
         </div>
+
+        <CustomizableButton />
 
         <div className="add-currie-options">
           <div className="currie-option">

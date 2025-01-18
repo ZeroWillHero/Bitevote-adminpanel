@@ -1,0 +1,20 @@
+
+
+.options{
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.select-option{
+padding-top: 5px;
+display: flex;
+flex-direction: row;
+gap: 30px;
+}
+
+.select-option label{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 5px;
+}
