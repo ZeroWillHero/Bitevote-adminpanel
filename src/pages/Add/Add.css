@@ -1,0 +1,92 @@
+.add{
+    width: 70%;
+    margin-left: max(5vw,25px);
+    margin-top: 50px;
+    color: #6d6d6d;
+    font-size: 16px;
+}
+
+.add form{
+    gap: 20px;
+}
+
+.add-image-upload img{
+    width: 120px;
+}
+
+.add-product-name, .add-product-description{
+    width: max(40%, 280px);
+}
+
+.add-size-meal{
+    display: flex;
+    gap: 30px;
+}
+
+.add-size-meal select, .add-size-meal input{
+    max-width: 120px;
+    padding: 10px;
+}
+
+.add-product-name input, .add-product-description textarea{
+    padding: 10px;
+}
+
+.add-category-price{
+    display: flex;
+    gap: 30px;
+}
+
+.add-category-price select, .add-category-price input{
+    max-width: 120px;
+    padding: 10px;
+}
+
+.add-btn{
+    max-width: 120px;
+    border: none;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+
+.add-currie-option-btn{
+    margin-left: 10px;
+  padding: 10px 20px;
+  background-color: #838683; /* Green background */
+  color: white; /* White text */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.add-currie-option-btn:hover{
+    background-color: #FF7F00
+}
+
+.add-currie-options{
+display: flex;
+gap: 100px;
+}
+
+.currie-option{
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    flex-direction: column;
+}
+
+.add-currie-option{
+    display: flex;
+    gap: 10px;
+    padding-left: 10px;
+}
+
+.add-currie-option input{
+    max-width: 200px;
+    padding: 10px;
+}
