@@ -78,6 +78,7 @@ gap: 100px;
     gap: 10px;
     margin-top: 20px;
     flex-direction: column;
+    
 }
 
 .add-currie-option{
@@ -89,4 +90,10 @@ gap: 100px;
 .add-currie-option input{
     max-width: 200px;
     padding: 10px;
+}
+
+.currie-option label{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 5px;
 }

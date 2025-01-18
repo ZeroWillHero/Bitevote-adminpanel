@@ -1,0 +1,19 @@
+.customizable{
+    display: flex;
+    flex-direction: column;
+}
+
+.customizable-button{
+    padding-top: 5px;
+display: flex;
+flex-direction: row;
+gap: 30px;
+}
+
+.customizable-button label{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 5px;
+}
+
+
