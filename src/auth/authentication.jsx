@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 const auth = getAuth(app);
 
 export const registerWithEmailAndPassword = async ( email, password ) => {
-    auth.CreateUserWithEmailAndPassword(email, password)
+    auth.CreateUserWithEmailAndPassword(auth,email, password)
     .then(() => {
         console.log('User created');
         toast.success('User created');
@@ -15,7 +15,7 @@ export const registerWithEmailAndPassword = async ( email, password ) => {
     });
 };
 
-export const loginWithEmailAndPassword = async ( email, password ) => {
+export const loginWithEmailAndPassword = async (auth, email, password ) => {
     auth.signInWithEmailAndPassword(email, password)
     .then(() => {
         console.log('User logged in');
