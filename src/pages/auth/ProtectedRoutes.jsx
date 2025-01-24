@@ -5,6 +5,8 @@ const ProtectedRoutes = ({ children }) => {
     
     let isAuth = false;
 
+    // check firebase isLogged 
+
     if (localStorage.getItem("accessToken")) {
         isAuth = true;
     }
