@@ -7,7 +7,7 @@ import RadioButtonGroup from '../../components/RadioButton/RadioButton';
 import CustomizableButton from '../../components/CustomizableButton/CustomizableButton';
 
 const Add = ({ url }) => {
-  const [image, setImage] = useState(false);
+  const [image, setImage] = useState(null);
   const [data, setData] = useState({
     name: '',
     size: '',
@@ -15,118 +15,82 @@ const Add = ({ url }) => {
     category: 'Fried Rice',
   });
 
+  const [selectedOptions, setSelectedOptions] = useState({
+    currieOptions: [],
+    mealOptions: [],
+  });
 
+  const [options, setOptions] = useState({
+    currieOptions: [
+      'Coconut Sambol',
+      'Dhal Curry',
+      'Soya Meat Curry',
+      'Green Bean Curry',
+      'Potato Curry',
+      'Mukunuwenna Mellum',
+    ],
+    mealOptions: [
+      'Boiled Egg',
+      'Omlette',
+      'Chicken Curry',
+      'Fried Chicken',
+      'Fish Curry',
+      'Fried Fish',
+    ],
+  });
 
-  const [selectedOptions1, setSelectedOptions1] = useState([]);
-  const [options1, setOptions1] = useState([
-    'Coconut Sambol',
-    'Dhal Curry',
-    'Soya Meat Curry',
-    'Green Bean Curry',
-    'Potato Curry',
-    'Mukunuwenna Mellum',
-  ]);
+  const [newOption, setNewOption] = useState({
+    currieOptions: '',
+    mealOptions: '',
+  });
 
-  const [newOption1, setNewOption1] = useState('');
-
-  const handleCheckboxChange = (event) => {
+  const handleCheckboxChange = (event, type) => {
     const { value, checked } = event.target;
+    setSelectedOptions((prev) => ({
+      ...prev,
+      [type]: checked
+        ? [...prev[type], value]
+        : prev[type].filter((option) => option !== value),
+    }));
+  };
 
-    if (checked) {
-      setSelectedOptions1([...selectedOptions1, value]);
-    } else {s
-      setSelectedOptions1(selectedOptions1.filter((option) => option !== value));
+  const handleAddOption = (type) => {
+    if (newOption[type].trim() !== '') {
+      setOptions((prev) => ({
+        ...prev,
+        [type]: [...prev[type], newOption[type].trim()],
+      }));
+      setNewOption((prev) => ({ ...prev, [type]: '' }));
     }
   };
 
-  const handleAddOption = () => {
-    if (newOption1.trim() !== '') {
-      setOptions1([...options1, newOption1.trim()]);
-      setNewOption1('');
-    }
-
-    if (checked) {
-      setSelectedOptions1([...selectedOptions1, value]);
-    } else {
-      setSelectedOptions1(selectedOptions1.filter((option) => option !== value));
-    }
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const [selectedOptions2, setSelectedOptions2] = useState([]);
-  const [options2, setOptions2] = useState([
-    'Boiled Egg',
-    'Omlette',
-    'Chicken Curry',
-    'Fried chicken',
-    'Fish Curry',
-    'Fried Fish',
-  ]);
-
-  const [newOption2, setNewOption2] = useState('');
-
-  const handleCheckboxChange2 = (event) => {
-    const { value, checked } = event.target;
-
-    if (checked) {
-      setSelectedOptions2([...selectedOptions2, value]);
-    } else {s
-      setSelectedOptions2(selectedOptions2.filter((option) => option !== value));
-    }
-  };
-
-  const handleAddOption2 = () => {
-    if (newOption2.trim() !== '') {
-      setOptions2([...options2, newOption2.trim()]);
-      setNewOption2('');
-    }
-
-    if (checked) {
-      setSelectedOptions2([...selectedOptions2, value]);
-    } else {
-      setSelectedOptions2(selectedOptions2.filter((option) => option !== value));
-    }
-  }; 
-
-
-
-
-  const [selectedSize, setSelectedSize] = useState('regular');
-  const handleSizeChange = (event) => {
-    setSelectedSize(event.target.value);
-  };
-
-  const onChangeHandler = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setData((data) => ({ ...data, [name]: value }));
-  };
-
-  const onSubmitHandler = async (event) => {
-    event.preventDefault();
+  const createFormData = () => {
     const formData = new FormData();
+    formData.append('image' , image);
     formData.append('name', data.name);
     formData.append('size', data.size);
-    formData.append('price', Number(data.price));
+    formData.append('price', data.price);
     formData.append('category', data.category);
-    formData.append('image', image);
-    const response = await axios.post(`${url}/api/food/add`, formData);
-    if (response.data.success) {
-      setData({
-        name: '',
-        size: '',
-        price: '',
-        category: 'Rice & Curry',
-      });
-      setImage(false);
-      toast.success(response.data.message);
-    } else {
-      toast.error(response.data.message);
-    }
+    formData.append('currieOptions', selectedOptions.currieOptions);
+    formData.append('mealOptions', selectedOptions.mealOptions);
+    return formData;
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    
+    
   };
 
   return (
     <div className="add">
-      <form className="flex-col" onSubmit={onSubmitHandler}>
+      <form className="flex-col" onSubmit={handleSubmit}>
         <div className="add-img-upload flex-col">
           <p>Upload Image</p>
           <label htmlFor="image">
@@ -136,38 +100,42 @@ const Add = ({ url }) => {
             />
           </label>
           <input
-            onChange={(e) => setImage(e.target.files[0])}
             type="file"
             id="image"
             hidden
             required
+            onChange={(e) => setImage(e.target.files[0])}
           />
         </div>
+
         <div className="add-product-name flex-col">
           <p>Product name</p>
           <input
-            onChange={onChangeHandler}
-            value={data.name}
             type="text"
             name="name"
             placeholder="Type here"
+            value={data.name}
+            onChange={handleChange}
           />
         </div>
+
         <RadioButtonGroup />
+
         <div className="add-size-meal">
           <div className="add-size flex-col">
             <p>Select size</p>
-            <select onChange={onChangeHandler} name="size">
+            <select name="size" onChange={handleChange}>
               <option value="Regular">Regular</option>
               <option value="Medium">Medium</option>
               <option value="Large">Large</option>
             </select>
           </div>
         </div>
+
         <div className="add-category-price">
           <div className="add-category flex-col">
             <p>Product category</p>
-            <select onChange={onChangeHandler} name="category">
+            <select name="category" onChange={handleChange}>
               <option value="Rice & Curry">Rice & Curry</option>
               <option value="Fried Rice">Fried Rice</option>
               <option value="Koththu">Koththu</option>
@@ -178,103 +146,61 @@ const Add = ({ url }) => {
               <option value="Noodles">Noodles</option>
             </select>
           </div>
+
           <div className="add-price flex-col">
             <p>Product price</p>
             <input
-              onChange={onChangeHandler}
-              value={data.price}
-              type="Number"
+              type="number"
               name="price"
               placeholder="Rs. 150"
+              value={data.price}
+              onChange={handleChange}
             />
           </div>
         </div>
 
         <CustomizableButton />
 
-        <div className="add-currie-options">
-          <div className="currie-option">
-            <h2>Select Currie Options</h2>
-
-            {/* Display checkboxes */}
-            {options1.map((option1, index1) => (
-              <div key={index1}>
+        {['currieOptions', 'mealOptions'].map((type, index) => (
+          <div key={index} className="add-currie-options">
+            <h2>Select {type === 'currieOptions' ? 'Currie Options' : 'Meal Options'}</h2>
+            {options[type].map((option, i) => (
+              <div key={i}>
                 <label>
                   <input
                     type="checkbox"
-                    value={option1}
-                    checked={selectedOptions1.includes(option1)}
-                    onChange={handleCheckboxChange}
+                    value={option}
+                    checked={selectedOptions[type].includes(option)}
+                    onChange={(e) => handleCheckboxChange(e, type)}
                   />
-                  {option1}
+                  {option}
                 </label>
               </div>
             ))}
-          </div>
-          {/* Input field and button to add a new option */}
-          <div style={{ marginTop: '20px' }} className="add-currie-option">
-            <div className="add-currie-option-area flex">
-              <input
-                type="text"
-                value={newOption1}
-                onChange={(e) => setNewOption1(e.target.value)}
-                placeholder="Enter a new option"
-              />
-            </div>
-            <div className="flex">
-              <button
-                onClick={handleAddOption}
-                className="add-currie-option-btn"
-              >
-                Add Option
-              </button>
-            </div>
-          </div>
-        </div>
 
-        <div className="add-currie-options">
-          <div className="currie-option">
-            <h2>Select Meal Options</h2>
-
-            {/* Display checkboxes */}
-            {options2.map((option2, index2) => (
-              <div key={index2}>
-                <label>
-                  <input
-                    type="checkbox"
-                    value={option2}
-                    checked={selectedOptions2.includes(option2)}
-                    onChange={handleCheckboxChange2}
-                  />
-                  {option2}
-                </label>
+            <div className="add-currie-option" style={{ marginTop: '20px' }}>
+              <div className="add-currie-option-area flex">
+                <input
+                  type="text"
+                  value={newOption[type]}
+                  onChange={(e) => setNewOption((prev) => ({ ...prev, [type]: e.target.value }))}
+                  placeholder={`Enter a new ${type === 'currieOptions' ? 'currie option' : 'meal option'}`}
+                />
               </div>
-            ))}
-          </div>
-          {/* Input field and button to add a new option */}
-          <div style={{ marginTop: '20px' }} className="add-currie-option">
-            <div className="add-currie-option-area flex">
-              <input
-                type="text"
-                value={newOption2}
-                onChange={(e) => setNewOption2(e.target.value)}
-                placeholder="Enter a new option"
-              />
-            </div>
-            <div className="flex">
-              <button
-                onClick={handleAddOption2}
-                className="add-currie-option-btn"
-              >
-                Add Option
-              </button>
+              <div className="flex">
+                <button
+                  type="button"
+                  className="add-currie-option-btn"
+                  onClick={() => handleAddOption(type)}
+                >
+                  Add Option
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        ))}
 
-        <button type="submit" className="add-btn">
-          ADD
-        </button>
+        <button type="submit" className="add-btn">ADD</button>
       </form>
     </div>
   );

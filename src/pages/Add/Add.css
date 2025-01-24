@@ -1,99 +1,162 @@
-.add{
-    width: 70%;
-    margin-left: max(5vw,25px);
-    margin-top: 50px;
-    color: #6d6d6d;
+/* General Form Styling */
+.add {
+    width: 80%;
+    margin: 50px auto;
+    color: #4a4a4a;
     font-size: 16px;
-}
-
-.add form{
-    gap: 20px;
-}
-
-.add-image-upload img{
-    width: 120px;
-}
-
-.add-product-name, .add-product-description{
-    width: max(40%, 280px);
-}
-
-.add-size-meal{
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  
+  .add form {
     display: flex;
-    gap: 30px;
-}
-
-.add-size-meal select, .add-size-meal input{
-    max-width: 120px;
-    padding: 10px;
-}
-
-.add-product-name input, .add-product-description textarea{
-    padding: 10px;
-}
-
-.add-category-price{
-    display: flex;
-    gap: 30px;
-}
-
-.add-category-price select, .add-category-price input{
-    max-width: 120px;
-    padding: 10px;
-}
-
-.add-btn{
-    max-width: 120px;
-    border: none;
-    padding: 10px;
-    background-color: black;
-    color: white;
-    cursor: pointer;
-}
-
-
-.add-currie-option-btn{
-    margin-left: 10px;
-  padding: 10px 20px;
-  background-color: #838683; /* Green background */
-  color: white; /* White text */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
-
-.add-currie-option-btn:hover{
-    background-color: #FF7F00
-}
-
-.add-currie-options{
-display: flex;
-gap: 100px;
-}
-
-.currie-option{
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
     flex-direction: column;
-    
-}
-
-.add-currie-option{
+    gap: 25px;
+  }
+  
+  /* Image Upload Section */
+  .add-img-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .add-img-upload p {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .add-img-upload label {
+    cursor: pointer;
+  }
+  
+  .add-img-upload img {
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 2px dashed #ff7f00;
+    background-color: #ffffff;
+  }
+  
+  /* Input Fields */
+  input[type="text"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+  }
+  
+  input[type="text"]:focus,
+  input[type="number"]:focus,
+  textarea:focus,
+  select:focus {
+    border-color: #ff7f00;
+    box-shadow: 0 0 5px rgba(255, 127, 0, 0.5);
+    outline: none;
+  }
+  
+  /* Checkbox Options */
+  .currie-option label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .currie-option input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #ff7f00;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .currie-option input[type="checkbox"]:hover {
+    border-color: #ff7f00;
+    background-color: #f3f3f3;
+  }
+  
+  .currie-option input[type="checkbox"]:checked {
+    background-color: #ff7f00;
+    border-color: #ff7f00;
+  }
+  
+  /* Section Headings */
+  .add-currie-options h2 {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  /* Option Input */
+  .add-currie-option {
     display: flex;
     gap: 10px;
-    padding-left: 10px;
-}
-
-.add-currie-option input{
-    max-width: 200px;
+    flex-wrap: wrap;
+  }
+  
+  .add-currie-option input {
+    max-width: 300px;
     padding: 10px;
-}
-
-.currie-option label{
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 5px;
-}
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .add-currie-option input:focus {
+    border-color: #ff7f00;
+    box-shadow: 0 0 5px rgba(255, 127, 0, 0.5);
+  }
+  
+  /* Buttons */
+  .add-btn,
+  .add-currie-option-btn {
+    padding: 12px 20px;
+    border: none;
+    background-color: #ff7f00;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .add-btn:hover,
+  .add-currie-option-btn:hover {
+    background-color: #e67300;
+    transform: scale(1.05);
+  }
+  
+  .add-btn:active,
+  .add-currie-option-btn:active {
+    transform: scale(0.95);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .add {
+      width: 90%;
+      margin: 20px auto;
+    }
+  
+    .add-currie-options {
+      flex-direction: column;
+      gap: 15px;
+    }
+  }
+  
