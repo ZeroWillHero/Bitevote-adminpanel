@@ -13,6 +13,7 @@ const Add = ({ url }) => {
     size: '',
     price: '',
     category: 'Fried Rice',
+    currie_size: '',
   });
 
   const [selectedOptions, setSelectedOptions] = useState({
@@ -30,12 +31,12 @@ const Add = ({ url }) => {
       'Mukunuwenna Mellum',
     ],
     mealOptions: [
-      'Boiled Egg',
-      'Omlette',
-      'Chicken Curry',
-      'Fried Chicken',
-      'Fish Curry',
-      'Fried Fish',
+      'Boiled Egg - (Rs.40)',
+      'Omlette - (Rs.40)',
+      'Chicken Curry - (Rs.50)',
+      'Fried Chicken - (Rs.60)',
+      'Fish Curry - (Rs.40)',
+      'Fried Fish - (Rs.40)',
     ],
   });
 
@@ -76,6 +77,8 @@ const Add = ({ url }) => {
     formData.append('size', data.size);
     formData.append('price', data.price);
     formData.append('category', data.category);
+    formData.append('currie_size', data.currie-size);
+    formData.append('extra_currie-price', data.extra-currie-price);
     formData.append('currieOptions', selectedOptions.currieOptions);
     formData.append('mealOptions', selectedOptions.mealOptions);
     return formData;
@@ -161,9 +164,38 @@ const Add = ({ url }) => {
 
         <CustomizableButton />
 
-        {['currieOptions', 'mealOptions'].map((type, index) => (
+        {['currieOptions'].map((type, index) => (
           <div key={index} className="add-currie-options">
-            <h2>Select {type === 'currieOptions' ? 'Currie Options' : 'Meal Options'}</h2>
+            <h2>Select Curries Option{type === 'currieOptions'}</h2>
+
+          {/* select default currie options */}
+            <div className="add-def-currie-options">
+          <div className="add-currie-size flex-col">
+            <p>Select default currie option size:</p>
+            <select name="currie_size" onChange={handleChange}>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+        
+
+        {/* price for the extra added currie */}
+        <div className="add-extra-currie-price flex-col">
+            <p>Price for the extra added currie:</p>
+            <input
+              type="number"
+              name="extra_currie_price"
+              placeholder="Rs. 15"
+              value={data.extra_currie_price}
+              onChange={handleChange}
+            />
+          </div>
+          </div>
+          <br />
+
+            {/* select currie options */}
             {options[type].map((option, i) => (
               <div key={i}>
                 <label>
@@ -184,7 +216,7 @@ const Add = ({ url }) => {
                   type="text"
                   value={newOption[type]}
                   onChange={(e) => setNewOption((prev) => ({ ...prev, [type]: e.target.value }))}
-                  placeholder={`Enter a new ${type === 'currieOptions' ? 'currie option' : 'meal option'}`}
+                  placeholder={`Enter a new ${type === 'currieOptions'}`}
                 />
               </div>
               <div className="flex">
@@ -199,6 +231,53 @@ const Add = ({ url }) => {
             </div>
           </div>
         ))}
+
+        {/* add meal option */}
+        {['mealOptions'].map((type, index) => (
+          <div key={index} className="add-currie-options">
+            <h2>Select Meals Option{type === 'mealOptions'}</h2>
+
+          {/* select default currie options */}
+            
+          
+
+            {/* select currie options */}
+            {options[type].map((option, i) => (
+              <div key={i}>
+                <label>
+                  <input
+                    type="checkbox"
+                    value={option}
+                    checked={selectedOptions[type].includes(option)}
+                    onChange={(e) => handleCheckboxChange(e, type)}
+                  />
+                  {option}
+                </label>
+              </div>
+            ))}
+
+            <div className="add-currie-option" style={{ marginTop: '20px' }}>
+              <div className="add-currie-option-area flex">
+                <input
+                  type="text"
+                  value={newOption[type]}
+                  onChange={(e) => setNewOption((prev) => ({ ...prev, [type]: e.target.value }))}
+                  placeholder={`Enter a new ${type === 'mealOptions'}`}
+                />
+              </div>
+              <div className="flex">
+                <button
+                  type="button"
+                  className="add-currie-option-btn"
+                  onClick={() => handleAddOption(type)}
+                >
+                  Add Option
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+
 
         <button type="submit" className="add-btn">ADD</button>
       </form>

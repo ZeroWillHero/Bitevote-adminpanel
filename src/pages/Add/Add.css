@@ -108,6 +108,12 @@
     flex-wrap: wrap;
   }
   
+  .add-def-currie-options{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
   .add-currie-option input {
     max-width: 300px;
     padding: 10px;
@@ -159,4 +165,5 @@
       gap: 15px;
     }
   }
+  
   
