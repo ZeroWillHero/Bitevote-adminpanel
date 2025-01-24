@@ -34,7 +34,7 @@ const Add = ({ url }) => {
 
     if (checked) {
       setSelectedOptions1([...selectedOptions1, value]);
-    } else {s
+    } else {
       setSelectedOptions1(selectedOptions1.filter((option) => option !== value));
     }
   };
@@ -69,7 +69,7 @@ const Add = ({ url }) => {
 
     if (checked) {
       setSelectedOptions2([...selectedOptions2, value]);
-    } else {s
+    } else {
       setSelectedOptions2(selectedOptions2.filter((option) => option !== value));
     }
   };
