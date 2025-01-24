@@ -2,7 +2,12 @@ import { Navigate } from "react-router-dom";
 import PropTypes from 'prop-types';
 
 const ProtectedRoutes = ({ children }) => {
-    const isAuth = false; // This should be replaced with your actual auth check logic
+    
+    let isAuth = false;
+
+    if (localStorage.getItem("accessToken")) {
+        isAuth = true;
+    }
     
     if (!isAuth) {
         return <Navigate to="/login" replace />; // Use replace to avoid adding the login route to history
