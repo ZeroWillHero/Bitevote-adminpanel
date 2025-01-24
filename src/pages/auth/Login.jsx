@@ -22,11 +22,10 @@ export default function Login() {
     });
   }
 
-  
-
   const submitData = async (e) => {
     e.preventDefault()
-    setIsLoading(true)
+    try{
+      setIsLoading(true)
     const response = await loginWithEmailAndPassword(data.email,data.password);
     dispatch(setUid(response.user.uid));
     dispatch(setAccessToken(response.accessToken));
@@ -35,6 +34,10 @@ export default function Login() {
     localStorage.setItem("accessToken" ,response.accessToken);
     setIsLoading(false);
     navigate("/");
+    }catch(error){
+      console.log(error)
+      setIsLoading(false);
+    }
   }
   return (
     <div className="main-wrapper">
