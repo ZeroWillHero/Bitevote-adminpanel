@@ -1,0 +1,63 @@
+.meal-list{
+    display: flex;
+    flex-direction: column;
+}
+
+.meal-list-inputs{
+
+    display: flex;
+    align-items: center;
+}
+
+.meal-list input.enter-meal input.enter-price{
+    max-width: 300px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.add-meal-button{
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #ff7f00;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+h1{
+    font-size: larger;
+}
+
+
+.added-meals input{
+    max-width: 300px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.added-meals{
+
+    gap: 10px;
+
+}
+
+.added-meals h2{
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.added-meals input{
+    
+}

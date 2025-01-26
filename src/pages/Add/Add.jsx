@@ -5,6 +5,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import RadioButtonGroup from '../../components/RadioButton/RadioButton';
 import CustomizableButton from '../../components/CustomizableButton/CustomizableButton';
+import MealList from '../../components/MealList/MealList';
+
 
 const Add = ({ url }) => {
   const [image, setImage] = useState(null);
@@ -31,12 +33,12 @@ const Add = ({ url }) => {
       'Mukunuwenna Mellum',
     ],
     mealOptions: [
-      'Boiled Egg - (Rs.40)',
-      'Omlette - (Rs.40)',
-      'Chicken Curry - (Rs.50)',
-      'Fried Chicken - (Rs.60)',
-      'Fish Curry - (Rs.40)',
-      'Fried Fish - (Rs.40)',
+      'Boiled Egg - Rs.40',
+      'Omlette - Rs.40',
+      'Chicken Curry - Rs.50',
+      'Fried Chicken - Rs.60',
+      'Fish Curry - Rs.40',
+      'Fried Fish - Rs.40',
     ],
   });
 
@@ -216,7 +218,7 @@ const Add = ({ url }) => {
                   type="text"
                   value={newOption[type]}
                   onChange={(e) => setNewOption((prev) => ({ ...prev, [type]: e.target.value }))}
-                  placeholder={`Enter a new ${type === 'currieOptions'}`}
+                  placeholder={`Enter a new Currie`}
                 />
               </div>
               <div className="flex">
@@ -262,7 +264,7 @@ const Add = ({ url }) => {
                   type="text"
                   value={newOption[type]}
                   onChange={(e) => setNewOption((prev) => ({ ...prev, [type]: e.target.value }))}
-                  placeholder={`Enter a new ${type === 'mealOptions'}`}
+                  placeholder={`Ex: Meal - Price`}
                 />
               </div>
               <div className="flex">
@@ -278,6 +280,8 @@ const Add = ({ url }) => {
           </div>
         ))}
 
+
+        <MealList/>
 
         <button type="submit" className="add-btn">ADD</button>
       </form>
