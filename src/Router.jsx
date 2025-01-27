@@ -3,6 +3,7 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import ProtectedRoutes from "./pages/auth/ProtectedRoutes";
 import Layout from "./layout";
+import { useEffect } from "react";
 
 export default function Router() {
    

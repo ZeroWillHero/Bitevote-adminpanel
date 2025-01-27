@@ -16,4 +16,10 @@ gap: 30px;
     gap: 5px;
 }
 
+.customizable{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
 

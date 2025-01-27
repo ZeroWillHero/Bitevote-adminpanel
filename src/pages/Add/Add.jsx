@@ -1,69 +1,45 @@
 import React, { useState } from 'react';
 import './Add.css';
 import { assets } from '../../assets/assets';
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 import RadioButtonGroup from '../../components/RadioButton/RadioButton';
 import CustomizableButton from '../../components/CustomizableButton/CustomizableButton';
-import MealList from '../../components/MealList/MealList';
-
+import { addFoods } from '../../firebase/foods/addFoods';
 
 const Add = ({ url }) => {
-  const [image, setImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({
     name: '',
     size: '',
     price: '',
     category: 'Fried Rice',
     currie_size: '',
-  });
-
-  const [selectedOptions, setSelectedOptions] = useState({
-    currieOptions: [],
-    mealOptions: [],
+    extra_currie_price: '',
+    imageUrl: '', // Add imageUrl field
   });
 
   const [options, setOptions] = useState({
-    currieOptions: [
-      'Coconut Sambol',
-      'Dhal Curry',
-      'Soya Meat Curry',
-      'Green Bean Curry',
-      'Potato Curry',
-      'Mukunuwenna Mellum',
-    ],
-    mealOptions: [
-      'Boiled Egg - Rs.40',
-      'Omlette - Rs.40',
-      'Chicken Curry - Rs.50',
-      'Fried Chicken - Rs.60',
-      'Fish Curry - Rs.40',
-      'Fried Fish - Rs.40',
-    ],
+    currieOptions: [],
   });
 
   const [newOption, setNewOption] = useState({
-    currieOptions: '',
-    mealOptions: '',
+    currieOptions: { name: '', price: '' },
   });
 
-  const handleCheckboxChange = (event, type) => {
-    const { value, checked } = event.target;
-    setSelectedOptions((prev) => ({
-      ...prev,
-      [type]: checked
-        ? [...prev[type], value]
-        : prev[type].filter((option) => option !== value),
-    }));
-  };
+  // Get the global state for isCustomizable
+  const isCustomizable = useSelector((state) => state.add.customBtn);
 
   const handleAddOption = (type) => {
-    if (newOption[type].trim() !== '') {
+    if (newOption[type].name.trim() !== '' && newOption[type].price.trim() !== '') {
+      const newItem = {
+        name: newOption[type].name.trim(),
+        price: newOption[type].price.trim(),
+      };
       setOptions((prev) => ({
         ...prev,
-        [type]: [...prev[type], newOption[type].trim()],
+        [type]: [...prev[type], newItem],
       }));
-      setNewOption((prev) => ({ ...prev, [type]: '' }));
+      setNewOption((prev) => ({ ...prev, [type]: { name: '', price: '' } }));
     }
   };
 
@@ -72,44 +48,44 @@ const Add = ({ url }) => {
     setData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const createFormData = () => {
-    const formData = new FormData();
-    formData.append('image' , image);
-    formData.append('name', data.name);
-    formData.append('size', data.size);
-    formData.append('price', data.price);
-    formData.append('category', data.category);
-    formData.append('currie_size', data.currie-size);
-    formData.append('extra_currie-price', data.extra-currie-price);
-    formData.append('currieOptions', selectedOptions.currieOptions);
-    formData.append('mealOptions', selectedOptions.mealOptions);
+  const handleNewOptionChange = (event, type) => {
+    const { name, value } = event.target;
+    setNewOption((prev) => ({
+      ...prev,
+      [type]: { ...prev[type], [name]: value },
+    }));
+  };
+
+  // Method to gather all form data into a JavaScript object
+  const gatherFormData = async () => {
+    const formData = {
+      ...data,
+      currieOptions: options.currieOptions, // Include all currie options
+    };
     return formData;
-  }
+  };
 
   const handleSubmit = async (event) => {
+    setIsLoading(true);
     event.preventDefault();
-
-    
-    
+    const formData = await gatherFormData();
+    console.log('Form Data:', formData); // Log the form data
+    await addFoods(formData);
+    setIsLoading(false); // Call the addFoods function from firebase
   };
 
   return (
     <div className="add">
       <form className="flex-col" onSubmit={handleSubmit}>
         <div className="add-img-upload flex-col">
-          <p>Upload Image</p>
-          <label htmlFor="image">
-            <img
-              src={image ? URL.createObjectURL(image) : assets.upload_area}
-              alt=""
-            />
-          </label>
+          <p>Enter Image URL</p>
           <input
-            type="file"
-            id="image"
-            hidden
+            type="text"
+            name="imageUrl"
+            placeholder="Enter image URL"
+            value={data.imageUrl}
+            onChange={handleChange}
             required
-            onChange={(e) => setImage(e.target.files[0])}
           />
         </div>
 
@@ -166,124 +142,81 @@ const Add = ({ url }) => {
 
         <CustomizableButton />
 
-        {['currieOptions'].map((type, index) => (
-          <div key={index} className="add-currie-options">
-            <h2>Select Curries Option{type === 'currieOptions'}</h2>
+        {/* Show currie options only if customizable */}
+        {isCustomizable && (
+          <>
+            {['currieOptions'].map((type, index) => (
+              <div key={index} className="add-currie-options">
+                <h2>Select Curries Option</h2>
 
-          {/* select default currie options */}
-            <div className="add-def-currie-options">
-          <div className="add-currie-size flex-col">
-            <p>Select default currie option size:</p>
-            <select name="currie_size" onChange={handleChange}>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select>
-          </div>
-        
+                {/* Default currie size and extra currie price */}
+                <div className="add-def-currie-options">
+                  <div className="add-currie-size flex-col">
+                    <p>Select default currie option size:</p>
+                    <select name="currie_size" onChange={handleChange}>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                  </div>
 
-        {/* price for the extra added currie */}
-        <div className="add-extra-currie-price flex-col">
-            <p>Price for the extra added currie:</p>
-            <input
-              type="number"
-              name="extra_currie_price"
-              placeholder="Rs. 15"
-              value={data.extra_currie_price}
-              onChange={handleChange}
-            />
-          </div>
-          </div>
-          <br />
+                  <div className="add-extra-currie-price flex-col">
+                    <p>Price for the extra added currie:</p>
+                    <input
+                      type="number"
+                      name="extra_currie_price"
+                      placeholder="Rs. 15"
+                      value={data.extra_currie_price}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <br />
 
-            {/* select currie options */}
-            {options[type].map((option, i) => (
-              <div key={i}>
-                <label>
-                  <input
-                    type="checkbox"
-                    value={option}
-                    checked={selectedOptions[type].includes(option)}
-                    onChange={(e) => handleCheckboxChange(e, type)}
-                  />
-                  {option}
-                </label>
+                {/* Display added currie options */}
+                {options[type].map((option, i) => (
+                  <div key={i}>
+                    <p>{`${option.name} - Rs.${option.price}`}</p>
+                  </div>
+                ))}
+
+                {/* Add new currie option */}
+                <div className="add-currie-option" style={{ marginTop: '20px' }}>
+                  <div className="add-currie-option-area flex">
+                    <input
+                      type="text"
+                      name="name"
+                      value={newOption[type].name}
+                      onChange={(e) => handleNewOptionChange(e, type)}
+                      placeholder="Enter a new currie name"
+                    />
+                    <input
+                      type="number"
+                      name="price"
+                      value={newOption[type].price}
+                      onChange={(e) => handleNewOptionChange(e, type)}
+                      placeholder="Price"
+                    />
+                  </div>
+                  <div className="flex">
+                    <button
+                      type="button"
+                      className="add-currie-option-btn"
+                      onClick={() => handleAddOption(type)}
+                    >
+                      Add Option
+                    </button>
+                  </div>
+                </div>
               </div>
             ))}
+          </>
+        )}
 
-            <div className="add-currie-option" style={{ marginTop: '20px' }}>
-              <div className="add-currie-option-area flex">
-                <input
-                  type="text"
-                  value={newOption[type]}
-                  onChange={(e) => setNewOption((prev) => ({ ...prev, [type]: e.target.value }))}
-                  placeholder={`Enter a new Currie`}
-                />
-              </div>
-              <div className="flex">
-                <button
-                  type="button"
-                  className="add-currie-option-btn"
-                  onClick={() => handleAddOption(type)}
-                >
-                  Add Option
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-
-        {/* add meal option */}
-        {['mealOptions'].map((type, index) => (
-          <div key={index} className="add-currie-options">
-            <h2>Select Meals Option{type === 'mealOptions'}</h2>
-
-          {/* select default currie options */}
-            
-          
-
-            {/* select currie options */}
-            {options[type].map((option, i) => (
-              <div key={i}>
-                <label>
-                  <input
-                    type="checkbox"
-                    value={option}
-                    checked={selectedOptions[type].includes(option)}
-                    onChange={(e) => handleCheckboxChange(e, type)}
-                  />
-                  {option}
-                </label>
-              </div>
-            ))}
-
-            <div className="add-currie-option" style={{ marginTop: '20px' }}>
-              <div className="add-currie-option-area flex">
-                <input
-                  type="text"
-                  value={newOption[type]}
-                  onChange={(e) => setNewOption((prev) => ({ ...prev, [type]: e.target.value }))}
-                  placeholder={`Ex: Meal - Price`}
-                />
-              </div>
-              <div className="flex">
-                <button
-                  type="button"
-                  className="add-currie-option-btn"
-                  onClick={() => handleAddOption(type)}
-                >
-                  Add Option
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-
-
-        <MealList/>
-
-        <button type="submit" className="add-btn">ADD</button>
+        <button type="submit" className="add-btn">
+          {isLoading ? 'Adding food...' : 'Add Food'}
+        </button>
       </form>
     </div>
   );

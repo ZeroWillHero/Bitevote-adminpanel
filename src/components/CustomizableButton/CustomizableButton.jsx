@@ -1,46 +1,31 @@
-
-import React, { useState } from "react";
+import React from "react";
 import "./CustomizableButton.css";
+import { useDispatch, useSelector } from "react-redux";
+import { setisCustomizable } from "../../global/AddForm/customizableButtonSlice";
 
 function CustomizableSelector() {
-  // State to manage the customizable option
-  const [isCustomizable, setIsCustomizable] = useState("");
+  const dispatch = useDispatch();
+  const isCustomizable = useSelector((state) => state.add.customBtn);
 
-  // Handle radio button change
-  const handleCustomizableChange = (event) => {
-    setIsCustomizable(event.target.value);
+  const handleCustomizable = (event) => {
+    const isChecked = event.target.checked;
+    dispatch(setisCustomizable(isChecked));
+    console.log(isCustomizable);
   };
 
   return (
-    <div className="customizable">
-        
-      <h2>Is this item customizable?</h2>
-      <div className="customizable-button">
-      {/* Radio buttons for customizable options */}
-      <label>
-        <input
-          type="radio"
-          name="customizable"
-          value="Customizable"
-          checked={isCustomizable === "Customizable"}
-          onChange={handleCustomizableChange}
-          style={{ marginRight: "10px" }}
-        />
-        Customizable
-      </label>
-
-      <label>
-        <input
-          type="radio"
-          name="customizable"
-          value="Not Customizable"
-          checked={isCustomizable === "Not Customizable"}
-          onChange={handleCustomizableChange}
-          style={{ marginRight: "10px" }}
-        />
-        Not Customizable
-      </label>
+    <div>
+      <h1>Set Customizable</h1>
+      <div className="customizable">
+      <label htmlFor="checkbox">isCustomizable</label>
+      <input
+        type="checkbox"
+        name="isCustomize"
+        checked={isCustomizable}
+        onChange={handleCustomizable}
+      />
       </div>
+      
     </div>
   );
 }

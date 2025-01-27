@@ -28,6 +28,10 @@ const Sidebar = () => {
           <img src={assets.order_icon} />
           <p>Orders</p>
         </button>
+        <button onClick={handleChange("account")} className="sidebar-option">
+          <img src={assets.account_image} height="30" />
+          <p>Account</p>
+        </button>
       </div>
     </div>
   );
